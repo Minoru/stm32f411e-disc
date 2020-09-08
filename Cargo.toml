@@ -1,0 +1,40 @@
+[package]
+name = "stm32f411e-disc"
+version = "0.1.0"
+authors = ["Alexander Batischev <eual.jp@gmail.com>"]
+edition = "2018"
+categories = [
+    "embedded",
+    "no-std",
+]
+description = "Board support crate for the STM32F411E DISCOVERY microcontroller board"
+keywords = [
+    "arm",
+    "cortex-m",
+    "template",
+    "bsp",
+    "stm32",
+    "stm32f411"
+]
+license = "0BSD"
+repository = "https://github.com/Minoru/stm32f411e-disk"
+readme = "README.md"
+
+[dependencies]
+cortex-m = "0.6.3"
+cortex-m-rt = "0.6.13"
+
+[dependencies.stm32f4xx-hal]
+features = ["rt", "stm32f411"]
+version = "0.8.3"
+
+[dev-dependencies]
+panic-halt = "0.2"
+
+[profile.dev]
+debug = true
+
+[profile.release]
+debug = true
+lto = true
+opt-level = "s"
