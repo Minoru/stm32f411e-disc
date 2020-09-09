@@ -6,7 +6,7 @@ use stm32f411e_disc as board;
 
 use board::hal::{delay, prelude::*, stm32};
 use board::{
-    led::{self, LedColor},
+    led::{self, OutputSwitch},
     peripheral,
 };
 
@@ -23,20 +23,30 @@ fn main() -> ! {
     let clocks = rcc.cfgr.freeze();
     let mut delayer = delay::Delay::new(syst, clocks);
 
-    let order = [
-        LedColor::Orange,
-        LedColor::Red,
-        LedColor::Blue,
-        LedColor::Green,
-    ];
+    let gpiod = board_peripherals.GPIOD.split();
 
-    let mut leds = led::Leds::new(board_peripherals.GPIOD.split());
+    let mut green_led = led::into_green_led(gpiod.pd12);
+    let mut orange_led = led::into_orange_led(gpiod.pd13);
+    let mut red_led = led::into_red_led(gpiod.pd14);
+    let mut blue_led = led::into_blue_led(gpiod.pd15);
 
-    for (prev, cur) in order.iter().cycle().zip(order.iter().cycle().skip(1)) {
-        leds[*prev].off();
-        leds[*cur].on();
-        delayer.delay_ms(100u32);
+    let delay: u32 = 100; // milliseconds
+
+    loop {
+        green_led.off().ok(); // TODO: replace by into_ok() once it's stabilized https://github.com/rust-lang/rust/issues/61695
+        orange_led.on().ok();
+        delayer.delay_ms(delay);
+
+        orange_led.off().ok();
+        red_led.on().ok();
+        delayer.delay_ms(delay);
+
+        red_led.off().ok();
+        blue_led.on().ok();
+        delayer.delay_ms(delay);
+
+        blue_led.off().ok();
+        green_led.on().ok();
+        delayer.delay_ms(delay);
     }
-
-    unreachable!("The infinite loop over LEDS terminated");
 }
