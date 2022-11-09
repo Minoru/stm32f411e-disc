@@ -4,7 +4,7 @@
 use panic_halt as _;
 use stm32f411e_disc as board;
 
-use board::hal::{delay, prelude::*, stm32};
+use board::hal::{pac, prelude::*};
 use board::{
     led::{self, OutputSwitch},
     peripheral,
@@ -12,16 +12,15 @@ use board::{
 
 #[board::entry]
 fn main() -> ! {
-    let board_peripherals = stm32::Peripherals::take()
+    let board_peripherals = pac::Peripherals::take()
         .expect("board peripherals are already taken at the start of the program");
 
     let cortex_peripherals = peripheral::Peripherals::take()
         .expect("Cortex M peripherals are already taken at the start of the program");
 
-    let syst = cortex_peripherals.SYST;
     let rcc = board_peripherals.RCC.constrain();
-    let clocks = rcc.cfgr.freeze();
-    let mut delayer = delay::Delay::new(syst, clocks);
+    let clocks = rcc.cfgr.sysclk(48.MHz()).freeze();
+    let mut delayer = cortex_peripherals.SYST.delay(&clocks);
 
     let gpiod = board_peripherals.GPIOD.split();
 

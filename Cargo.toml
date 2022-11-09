@@ -22,13 +22,13 @@ repository = "https://github.com/Minoru/stm32f411e-disc"
 readme = "README.md"
 
 [dependencies]
-cortex-m = "0.6.3"
-cortex-m-rt = "0.6.13"
-switch-hal = "0.3.2"
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+switch-hal = "0.4"
 
 [dependencies.stm32f4xx-hal]
 features = ["rt", "stm32f411"]
-version = "0.8.3"
+version = "0.13"
 
 [dev-dependencies]
 panic-halt = "0.2"
