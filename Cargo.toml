@@ -24,7 +24,6 @@ readme = "README.md"
 [dependencies]
 cortex-m = "0.7"
 cortex-m-rt = "0.7"
-switch-hal = "0.4"
 
 [dependencies.stm32f4xx-hal]
 features = ["rt", "stm32f411"]
