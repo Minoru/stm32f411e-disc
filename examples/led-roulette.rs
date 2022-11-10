@@ -5,8 +5,8 @@
 use panic_halt as _;
 use stm32f411e_disc as board;
 
-use board::hal::{pac, prelude::*, rcc};
 use board::{
+    hal::{pac, prelude::*, rcc},
     led::{LedColor, Leds},
     peripheral,
 };
