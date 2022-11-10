@@ -1,3 +1,4 @@
+//! This example lights up each user LED in turn, endlessly.
 #![no_std]
 #![no_main]
 

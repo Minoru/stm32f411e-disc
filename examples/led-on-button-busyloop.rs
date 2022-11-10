@@ -1,3 +1,5 @@
+//! This example lights up the blue LED as long as the blue push-button is pressed. It uses a busy
+//! loop to check if the button is pressed.
 #![no_std]
 #![no_main]
 
