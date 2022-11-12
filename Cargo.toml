@@ -37,7 +37,7 @@ cortex-m-semihosting = "0.5"
 debug = true
 
 [profile.release]
+debug = true
 lto = true
 opt-level = "s"
 codegen-units = 1
-strip = "symbols"
