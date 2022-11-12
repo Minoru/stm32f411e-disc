@@ -31,6 +31,7 @@ version = "0.13"
 
 [dev-dependencies]
 panic-halt = "0.2"
+cortex-m-semihosting = "0.5"
 
 [profile.dev]
 debug = true
