@@ -12,7 +12,7 @@ ST-Link V2 debugging interface.
 This crate is a work in progress. Current support status for peripherals is:
 
 - [x] LEDs
-- [ ] push-buttons
+- [x] push-buttons
 - [ ] gyroscope
 - [ ] compass
 - [ ] accelerometer

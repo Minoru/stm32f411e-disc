@@ -10,6 +10,7 @@ use board::{
     hal::{pac, prelude::*, rcc},
     led::{LedColor, Leds},
     peripheral,
+    user_button::UserButton,
 };
 
 #[board::entry]
@@ -25,7 +26,7 @@ fn main() -> ! {
     let mut delayer = cortex_peripherals.SYST.delay(&clocks);
 
     let gpioa = board_peripherals.GPIOA.split();
-    let button = gpioa.pa0.into_input();
+    let button = UserButton::new(gpioa.pa0);
 
     let gpiod = board_peripherals.GPIOD.split();
     let blue_led = &mut Leds::new(gpiod)[LedColor::Blue];
@@ -33,7 +34,7 @@ fn main() -> ! {
     let delay: u32 = 10; // milliseconds
 
     loop {
-        if button.is_high() {
+        if button.is_pressed() {
             blue_led.on();
         } else {
             blue_led.off();

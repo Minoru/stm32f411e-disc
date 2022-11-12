@@ -9,11 +9,12 @@ use stm32f411e_disc as board;
 
 use board::{
     hal::{
-        gpio::{gpioa::PA0, Edge},
+        gpio::Edge,
         pac::{self, interrupt, Interrupt},
         prelude::*,
     },
     led::{LedColor, Leds},
+    user_button::UserButton,
 };
 use core::cell::RefCell;
 use cortex_m::interrupt::Mutex;
@@ -25,17 +26,17 @@ fn main() -> ! {
 
     // Get the pin that corresponds to the button
     let gpioa = board_peripherals.GPIOA.split();
-    let mut button = gpioa.pa0.into_input();
+    let mut button = UserButton::new(gpioa.pa0);
 
     // Configure the button to generate EXTI interrupt
     let mut syscfg = board_peripherals.SYSCFG.constrain();
     let mut exti = board_peripherals.EXTI;
-    button.make_interrupt_source(&mut syscfg);
+    button.pin.make_interrupt_source(&mut syscfg);
     // Button connects voltage to the pin. The interrupt is generated whenever the voltage changes.
     // Here, we request an interrupt to be generated *both* when the voltage is applied (a rising
     // edge) and when the voltage stops being applied (a falling edge)
-    button.trigger_on_edge(&mut exti, Edge::RisingFalling);
-    button.enable_interrupt(&mut exti);
+    button.pin.trigger_on_edge(&mut exti, Edge::RisingFalling);
+    button.pin.enable_interrupt(&mut exti);
 
     let gpiod = board_peripherals.GPIOD.split();
     let leds = Leds::new(gpiod);
@@ -65,7 +66,7 @@ fn main() -> ! {
 struct IrqContext {
     leds: Leds,
 
-    button: PA0,
+    button: UserButton,
 
     /// The state of the button the last time the interrupt fired.
     ///
@@ -92,14 +93,14 @@ fn EXTI0() {
     cortex_m::interrupt::free(|cs| {
         if let Some(context) = &mut *IRQ_CONTEXT.borrow(cs).borrow_mut() {
             let blue_led = &mut context.leds[LedColor::Blue];
-            let is_pressed = context.button.is_high();
+            let is_pressed = context.button.is_pressed();
             if !context.was_pressed && is_pressed {
                 blue_led.on();
             } else if context.was_pressed && !is_pressed {
                 blue_led.off();
             }
             context.was_pressed = is_pressed;
-            context.button.clear_interrupt_pending_bit();
+            context.button.pin.clear_interrupt_pending_bit();
         };
     })
 }

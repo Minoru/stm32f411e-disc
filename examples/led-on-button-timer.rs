@@ -9,13 +9,13 @@ use stm32f411e_disc as board;
 
 use board::{
     hal::{
-        gpio::gpioa::PA0,
         pac::{self, interrupt, Interrupt, TIM2},
         prelude::*,
         rcc,
         timer::{counter::Counter, Event},
     },
     led::{LedColor, Leds},
+    user_button::UserButton,
 };
 use core::cell::RefCell;
 use cortex_m::interrupt::Mutex;
@@ -29,7 +29,7 @@ fn main() -> ! {
     let clocks = rcc.cfgr.sysclk(rcc::SYSCLK_MIN.Hz()).freeze();
 
     let gpioa = board_peripherals.GPIOA.split();
-    let button = gpioa.pa0.into_input();
+    let button = UserButton::new(gpioa.pa0);
 
     let gpiod = board_peripherals.GPIOD.split();
     let leds = Leds::new(gpiod);
@@ -66,7 +66,7 @@ const COUNTER_FREQ_HZ: u32 = 1_000;
 
 struct Tim2Context {
     leds: Leds,
-    button: PA0,
+    button: UserButton,
     timer: Counter<TIM2, COUNTER_FREQ_HZ>,
 }
 
@@ -88,7 +88,7 @@ fn TIM2() {
     cortex_m::interrupt::free(|cs| {
         if let Some(context) = &mut *TIM2_CONTEXT.borrow(cs).borrow_mut() {
             let blue_led = &mut context.leds[LedColor::Blue];
-            if context.button.is_high() {
+            if context.button.is_pressed() {
                 blue_led.on();
             } else {
                 blue_led.off();
