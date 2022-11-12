@@ -36,6 +36,7 @@ panic-halt = "0.2"
 debug = true
 
 [profile.release]
-debug = true
 lto = true
 opt-level = "s"
+codegen-units = 1
+strip = "symbols"
