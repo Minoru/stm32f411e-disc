@@ -7,8 +7,9 @@ use panic_halt as _;
 use stm32f411e_disc as board;
 
 use board::{
-    hal::{i2c, pac, prelude::*},
+    hal::{pac, prelude::*},
     led::{LedColor, Leds},
+    lsm303dlhc,
 };
 
 #[board::entry]
@@ -28,15 +29,9 @@ fn main() -> ! {
     let mut leds = Leds::new(gpiod);
 
     let gpiob = board_peripherals.GPIOB.split();
-    let i2c1_scl = gpiob.pb6;
-    let i2c1_sda = gpiob.pb9;
-    let i2c1 = i2c::I2c::new(
-        board_peripherals.I2C1,
-        (i2c1_scl, i2c1_sda),
-        i2c::Mode::standard(400.kHz()),
-        &clocks,
-    );
-    let mut sensor = lsm303dlhc::Lsm303dlhc::new(i2c1).expect("Failed to initialize LSM303DLHC");
+    let mut sensor =
+        lsm303dlhc::Lsm303dlhc::new(board_peripherals.I2C1, gpiob.pb6, gpiob.pb9, &clocks, true)
+            .expect("Failed to initialize LSM303DLHC (accelerometer + magnetometer)");
     let itm = &mut cortex_peripherals.ITM.stim[0];
 
     let delay: u32 = 100; // milliseconds

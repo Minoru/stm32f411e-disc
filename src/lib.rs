@@ -6,4 +6,5 @@ pub use cortex_m::*;
 pub use cortex_m_rt::*;
 
 pub mod led;
+pub mod lsm303dlhc;
 pub mod user_button;

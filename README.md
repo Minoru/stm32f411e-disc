@@ -14,8 +14,8 @@ This crate is a work in progress. Current support status for peripherals is:
 - [x] LEDs
 - [x] push-buttons
 - [ ] gyroscope
-- [ ] accelerometer
-- [ ] magnetic sensor
+- [x] accelerometer
+- [x] magnetic sensor
 - [ ] microphone
 - [ ] audio DAC
 - [ ] USB OTG
