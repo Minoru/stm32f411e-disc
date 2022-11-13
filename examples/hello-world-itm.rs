@@ -27,5 +27,6 @@ fn main() -> ! {
     let mut itm = cortex_peripherals.ITM;
     board::iprintln!(&mut itm.stim[0], "Hello, world!");
 
+    #[allow(clippy::empty_loop)]
     loop {}
 }

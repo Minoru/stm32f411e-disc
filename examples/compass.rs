@@ -52,12 +52,10 @@ fn main() -> ! {
             } else {
                 leds[LedColor::Blue].on();
             }
+        } else if mag.y > 0 {
+            leds[LedColor::Green].on();
         } else {
-            if mag.y > 0 {
-                leds[LedColor::Green].on();
-            } else {
-                leds[LedColor::Red].on();
-            }
+            leds[LedColor::Red].on();
         }
 
         delayer.delay_ms(delay);

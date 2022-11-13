@@ -29,5 +29,6 @@ use cortex_m_semihosting::hprintln;
 fn main() -> ! {
     hprintln!("Hello, world!");
 
+    #[allow(clippy::empty_loop)]
     loop {}
 }
