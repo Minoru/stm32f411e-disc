@@ -8,15 +8,9 @@
 //!    contents with `itmdump`;
 //! 4. *in a different terminal*, `openocd` to launch OpenOCD;
 //! 5. *in yet another terminal*, `gdb-multiarch -q
-//!    target/thumbv7em-none-eabihf/release/examples/hello-world-itm`, which will start a GDB
-//!    session in which you have to run a few more GDB commands:
-//!
-//!    1. `target extended-remote :3333` to connect to OpenOCD;
-//!    2. `monitor tpiu config internal itm.txt uart off 16000000` to start writing ITM messages
-//!       into itm.txt file. 16000000 is 16 MHz, the default core frequency of our Discovery board;
-//!    3. `monitor itm port 0 on` to enable the ITM port;
-//!    4. `load` to flash the program onto the board;
-//!    5. `continue` to start running the program.
+//!    target/thumbv7em-none-eabihf/release/examples/hello-world-itm -x openocd-itm.gdb`, which
+//!    will start a GDB session with all the necessary configurations;
+//! 6. in GDB, type `continue` to start the program.
 //!
 //! You should now see output in the terminal where `itmdump` is running.
 #![no_std]
