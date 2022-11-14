@@ -1,0 +1,41 @@
+//! This example prints the current temperature reading to ITM.
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+use stm32f411e_disc as board;
+
+use board::{
+    hal::{pac, prelude::*},
+    lsm303dlhc,
+};
+
+#[board::entry]
+fn main() -> ! {
+    let board_peripherals = pac::Peripherals::take()
+        .expect("board peripherals are already taken at the start of the program");
+
+    let mut cortex_peripherals = board::peripheral::Peripherals::take()
+        .expect("Cortex M peripherals are already taken at the start of the program");
+
+    let rcc = board_peripherals.RCC.constrain();
+    let clocks = rcc.cfgr.sysclk(16.MHz()).freeze();
+    let mut delayer = cortex_peripherals.SYST.delay(&clocks);
+
+    let gpiob = board_peripherals.GPIOB.split();
+    let mut sensor =
+        lsm303dlhc::Lsm303dlhc::new(board_peripherals.I2C1, gpiob.pb6, gpiob.pb9, &clocks, true)
+            .expect("Failed to initialize LSM303DLHC (accelerometer + magnetometer)");
+    let itm = &mut cortex_peripherals.ITM.stim[0];
+
+    loop {
+        let temperature = sensor
+            .temp()
+            .expect("Failed to read temperature from LSM303DLHC");
+        // The datasheet for the thermometer doesn't specify if it's calibrated, and where its zero
+        // is. Thus you can only use it to measure *change* in temperature (unless you calibrate
+        // the sensor yourself).
+        board::iprintln!(itm, "Temperature is <unknown offset> + {:.3}C", temperature as f32 / 8.0);
+        delayer.delay_ms(1_000_u32);
+    }
+}
