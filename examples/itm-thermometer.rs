@@ -25,7 +25,7 @@ fn main() -> ! {
     let gpiob = board_peripherals.GPIOB.split();
     let mut sensor =
         lsm303dlhc::Lsm303dlhc::new(board_peripherals.I2C1, gpiob.pb6, gpiob.pb9, &clocks, true)
-            .expect("Failed to initialize LSM303DLHC (accelerometer + magnetometer)");
+            .expect("Failed to initialize LSM303DLHC (accelerometer + magnetometer + thermometer)");
     let itm = &mut cortex_peripherals.ITM.stim[0];
 
     loop {
