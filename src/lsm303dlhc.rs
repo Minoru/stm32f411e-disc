@@ -1,4 +1,4 @@
-//! LSM303DLHC, accelerometer + magnetometer.
+//! LSM303DLHC, accelerometer + magnetometer + thermometer.
 //!
 //! This is a thin wrapper over the lsm303dlhc crate. Please see its docs for available methods.
 
@@ -12,7 +12,7 @@ use crate::hal::{
 
 type Inner = lsm303dlhc::Lsm303dlhc<I2c<I2C1, (PB6, PB9)>>;
 
-/// Accelerometer and magnetometer.
+/// Accelerometer, magnetometer, and thermometer.
 pub struct Lsm303dlhc {
     pub inner: Inner,
 }
