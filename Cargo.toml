@@ -25,6 +25,7 @@ readme = "README.md"
 cortex-m = "0.7"
 cortex-m-rt = "0.7"
 lsm303dlhc = "0.2"
+l3gd20 = "0.3"
 
 [dependencies.stm32f4xx-hal]
 features = ["rt", "stm32f411"]
