@@ -27,7 +27,7 @@ impl L3gd20 {
         ncs: PE3,
         clocks: &Clocks,
     ) -> core::result::Result<Self, Error> {
-        let spi = Spi::new(spi1, (sck, miso, mosi), l3gd20::MODE, 10_u32.MHz(), &clocks);
+        let spi = Spi::new(spi1, (sck, miso, mosi), l3gd20::MODE, 10_u32.MHz(), clocks);
         let ncs = ncs.into_push_pull_output();
         l3gd20::L3gd20::new(spi, ncs).map(|inner| Self { inner })
     }
