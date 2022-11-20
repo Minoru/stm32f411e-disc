@@ -13,7 +13,7 @@ This crate is a work in progress. Current support status for peripherals is:
 
 - [x] LEDs
 - [x] push-buttons
-- [ ] gyroscope
+- [x] gyroscope
 - [x] accelerometer
 - [x] magnetic sensor
 - [x] thermometer
