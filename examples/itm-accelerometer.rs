@@ -10,28 +10,7 @@ use board::{
     lsm303dlhc,
 };
 
-trait Math {
-    fn abs(self) -> Self;
-    fn sqrt(self) -> Self;
-}
-
-impl Math for f32 {
-    fn abs(self) -> Self {
-        if self < 0.0 {
-            -self
-        } else {
-            self
-        }
-    }
-
-    fn sqrt(self) -> Self {
-        let mut result: f32 = 1.0;
-        while (result * result - self).abs() > 1e-6 {
-            result = 0.5 * (result + self / result);
-        }
-        result
-    }
-}
+use libm::sqrtf;
 
 #[board::entry]
 fn main() -> ! {
@@ -59,7 +38,7 @@ fn main() -> ! {
             let x = measurement.x as f32 / (2_i32.pow(14) as f32);
             let y = measurement.y as f32 / (2_i32.pow(14) as f32);
             let z = measurement.z as f32 / (2_i32.pow(14) as f32);
-            let a = (x * x + y * y + z * z).sqrt();
+            let a = sqrtf(x * x + y * y + z * z);
             board::iprintln!(
                 itm,
                 "LSM303DLHC measurements:\tx {:6.3} g\ty {:6.3} g\tz {:6.3} g\ta {:6.3} g",
